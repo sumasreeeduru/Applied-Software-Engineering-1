@@ -51,7 +51,7 @@
                         </a>
                       </li>
                       <li class="nav-item "style="padding-left: 40px;">
-                        <a class="nav-link" href="{% url 'myvolunteerinfo' %} ">
+                        <a class="nav-link" href="{% url 'myvolunteerinfo' %}">
                           <i class="material-icons"></i>
                           <p>My Volunteer info</p>
                         </a>
@@ -102,7 +102,7 @@
                           <a class="nav-link" href="{% url 'Buy' %}" style="color:black;">Buy</a>
                         </li>
                         <li class="nav-item">
-                          <a class="nav-link" href="#" style="color:black;">Sell</a>
+                          <a class="nav-link" href="{% url 'sell' %}" style="color:black;">Sell</a>
                         </li>
                         <li class="nav-item">
                           <a class="nav-link" href="#" style="color:black;">Hire</a>
@@ -134,26 +134,97 @@
                       <div class="col-md-8">
                         <div class="card">
                           <div class="card-header card-header-primary">
-                            <h4 class="card-title">Edit Profile</h4>
-                            <p class="card-category">Complete your profile</p>
+                            <h4 class="card-title">Edit your Volunteer info</h4>
+                            <p class="card-category">Complete your volunteer info</p>
                           </div>
                           <div class="card-body">
                         
                               
                               
-                              <div class="col-lg-6">
-                                <form method="POST" enctype="multipart/form-data">
-                                  {% csrf_token %}
-                                    <fieldset class = "form-group">
-                                      <legend class="border-bottom mb-4">Profile Info</legend>
-                                      {{ u_form|crispy }}
-                                      {{ p_form|crispy }}
-                                    </fieldset>
-                              <div class="form-group">
-                                <button type="submit" class="btn btn-warning">Update</button>
-                              </div>
-                                </form>
-                            </div>
+                              
+                            <form>
+                                <div class="row">
+                                  <div class="col-md-5">
+                                    <div class="form-group">
+                                      <label class="bmd-label-floating">Your name (disabled)</label>
+                                      {{ u_form.first_name }}
+                                      <input type="text" class="form-control" placeholder="Thanya" disabled>
+                                    </div>
+                                  </div>
+                                  <div class="col-md-3">
+                                    <div class="form-group">
+                                      <label class="bmd-label-floating">Nick name</label>
+                                      <input type="text" class="form-control">
+                                    </div>
+                                  </div>
+                                  <div class="col-md-4">
+                                    <div class="form-group">
+                                      <label class="bmd-label-floating">Email address</label>
+                                      {{ user.email }}
+                                      </div>
+                                  </div>
+                                </div>
+                                <div class="row">
+                                  <div class="col-md-6">
+                                    <div class="form-group">
+                                      <label class="bmd-label-floating">Contact details</label>
+                                      <input type="text" class="form-control">
+                                    </div>
+                                  </div>
+                                  <div class="col-md-6">
+                                    <div class="form-group">
+                                      <label class="bmd-label-floating">Occupation/studies</label>
+                                      <input type="text" class="form-control">
+                                    </div>
+                                  </div>
+                                </div>
+                                <div class="row">
+                                  <div class="col-md-12">
+                                    <div class="form-group">
+                                      <label class="bmd-label-floating">Address</label>
+                                      {{ v_form.address }}
+                                      <input type="text" class="form-control">
+                                    </div>
+                                  </div>
+                                </div>
+                                <div class="row">
+                                  <div class="col-md-4">
+                                    <div class="form-group">
+                                      <label class="bmd-label-floating">City</label>
+                                      {{ v_form.city }}
+                                      <input type="text" class="form-control">
+                                    </div>
+                                  </div>
+                                  <div class="col-md-4">
+                                    <div class="form-group">
+                                      <label class="bmd-label-floating">State</label>
+                                      {{ v_form.state }}
+                                      <input type="text" class="form-control">
+                                    </div>
+                                  </div>
+                                  <div class="col-md-4">
+                                    <div class="form-group">
+                                      <label class="bmd-label-floating">Postal Code</label>
+                                      {{ v_form.pincode }}
+                                      <input type="text" class="form-control">
+                                    </div>
+                                  </div>
+                                </div>
+                                <div class="row">
+                                  <div class="col-md-12">
+                                    <div class="form-group">
+                                      <label>About Me</label>
+                                      <div class="form-group">
+                                        <label class="bmd-label-floating"> You can add your works that you can do(cannot be more than 300 words)</label>
+                                        <textarea class="form-control" rows="5"></textarea>
+                                      </div>
+                                    </div>
+                                  </div>
+                                </div>
+                                <button type="submit" class="btn btn-primary pull-right">
+                                    <a href="{% url 'registeredsucc' %}" style="color: white;text-decoration: none;">Update Volunteer info</a></button>
+                                <div class="clearfix"></div>
+                              </form>
                              
                               <!-- <button type="submit" class="btn btn-primary pull-right">Update Profile</button>
                               <div class="clearfix"></div>

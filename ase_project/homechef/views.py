@@ -1,7 +1,6 @@
 from django.shortcuts import render, get_object_or_404, redirect
 from . import models
 from django.http import HttpResponse
-from django.shortcuts import get_object_or_404
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status
@@ -18,6 +17,13 @@ from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin
 from .forms import CheckoutForm
+from profiles.forms import VolunteerForm, VolunteerUpdateForm
+from profiles.models import VolunteerModel
+from django.core.paginator import Paginator
+from django.db.models import Q
+from payment.views import payment_process
+from profiles.forms import VolunteerForm, VolunteerUpdateForm
+from profiles.models import VolunteerModel
 
 def landing(request):
     return render(request, 'homechef/landing.html')
@@ -41,14 +47,35 @@ def Bevolunteer(request):
 def Volunteerform(request):
 	return render(request,'homechef/index.html')
 
-def search(request):
-	if request.method=='POST':
-		name_search=request.POST.get('q')
-		search_list=models.Vendor.objects.filter(name=name_search)
-		return render(request,'homechef/search.html',{'data':search_list})
-	else:
-		data=models.Vendor.objects.all()
-		return render(request,'homechef/vendor.html',{'data':data})
+def addsucc(request):
+	return render(request,'homechef/addsucc.html')
+
+def deletedsucc(request):
+	return render(request,'homechef/deletedsucc.html')
+
+def purchaseinfo(request):
+	return render(request,'homechef/purchaseinfo.html')
+
+def registeredsucc(request):
+	return render(request,'homechef/registeredsucc.html')
+
+def searchfood(request):
+	return render(request,'homechef/searchfood.html')
+
+def sell(request):
+	return render(request,'homechef/sell.html')
+
+def sellerprofile(request):
+	return render(request,'homechef/sellerprofile.html')
+
+def temporary(request):
+	return render(request,'homechef/temporary.html')
+
+def hire(request):
+	return render(request,'homechef/hire.html')
+
+def hireweb(request):
+	return render(request, 'homechef/hireweb.html')
 
 def display(request,vendor_id):
 	data=None
@@ -210,28 +237,165 @@ class CheckoutView(View):
 		form = CheckoutForm(self.request.POST or None)
 		try:
 			order = models.Order.objects.get(user=self.request.user,ordered=False)
-			if form.is_valid():
-				street_address = form.cleaned_data.get('street_address')
-				apartment_address = form.cleaned_data.get('apartment_address')
-				country = form.cleaned_data.get('country')
-				zipfield = form.cleaned_data.get('zipfield')
-				payment_option = form.cleaned_data.get('payment_option')
-				# billing_address = models.BillingAddress(
-				# 	user = self.request.user,
-				# 	street_address = street_address,
-				# 	apartment_address = apartment_address,
-				# 	country = country,
-				# 	zipfield = zipfield
-				# )
-				# billing_address.save()
-				# order.billing_address = billing_address
-				order.save()
-				return redirect('checkout')
-			messages.warning(self.request,"Failed checkout")
-			return redirect('checkout')
+			# print(form.street_address)
+			# print(form.apartment_address)
+			# print(form.country)
+			# print(form.zipfield)
+			# print(form.payment_option)
+			# if form.is_valid():
+			# 	street_address = form.cleaned_data.get('street_address')
+			# 	apartment_address = form.cleaned_data.get('apartment_address')
+			# 	country = form.cleaned_data.get('country')
+			# 	zipfield = form.cleaned_data.get('zipfield')
+			# 	payment_option = form.cleaned_data.get('payment_option')
+			# 	# billing_address = models.BillingAddress(
+			# 	# 	user = self.request.user,
+			# 	# 	street_address = street_address,
+			# 	# 	apartment_address = apartment_address,
+			# 	# 	country = country,
+			# 	# 	zipfield = zipfield
+			# 	# )
+			# 	# billing_address.save()
+			# 	# order.billing_address = billing_address
+			# 	order.save()
+			# 	return redirect('checkout')
+			# messages.warning(self.request,"Failed checkout")
+			return redirect('payment')
 		except ObjectDoesNotExist:
 			messages.error(self.request,"You do not have an active order")
 			return redirect("order-summary")
-		
-			
 
+def search (request):
+    #data2=None
+    fulldata=[]
+    query=request.GET.get('q')
+    data1=models.Vendor.objects.all()
+    fulldata=[f.name for f in data1]
+    
+    for i in range(len(fulldata)):
+        if(fulldata[i].upper()==query.upper()):
+            data=models.Vendor.objects.filter(name=fulldata[i])
+        else:
+            data=models.Vendor.objects.filter(Q(name__contains=query.capitalize()) | Q(description__contains=query.capitalize()))
+    
+    #data=models.Vendor.objects.filter(name=query)
+
+    
+    return render(request,'homechef/search.html',{'data':data})
+	
+def searchfood(request):
+    query=request.GET.get('q')
+     
+    data=models.FoodItem.objects.filter(Q(itemname__contains=query.capitalize()) | Q(description__contains=query.capitalize()) | Q(ingredients__name__contains=query.capitalize()))
+    return render(request,'homechef/searchfood.html',{'data':data})
+
+def searchaddress(request):
+	# query=request.GET.get('q')
+	# data=models.Vendor.objects.filter(address=query.capitalize())
+	# return render(request,'homechef/search.html',{'data':data})
+	# 
+	query=request.GET.get('q')
+	data=models.Vendor.objects.filter(Q(address__icontains=query.capitalize()))
+	return render(request,'homechef/search.html',{'data':data})	
+
+def searchrating1(request):
+	data=models.Vendor.objects.filter(rating=1)
+	return render(request,'homechef/search.html',{'data':data})	
+
+def searchrating2(request):
+	data=models.Vendor.objects.filter(rating=2)
+	return render(request,'homechef/search.html',{'data':data})	
+
+def searchrating3(request):
+	data=models.Vendor.objects.filter(rating=3)
+	return render(request,'homechef/search.html',{'data':data})	
+
+def searchrating4(request):
+	data=models.Vendor.objects.filter(rating=4)
+	return render(request,'homechef/search.html',{'data':data})	
+
+def searchrating5(request):
+	data=models.Vendor.objects.filter(rating=5)
+	return render(request,'homechef/search.html',{'data':data})	
+
+def foodrating1(request):
+	data=models.FoodItem.objects.filter(rating=1)
+	return render(request,'homechef/searchfood.html',{'data':data})	
+
+def foodrating2(request):
+	data=models.FoodItem.objects.filter(rating=2)
+	return render(request,'homechef/searchfood.html',{'data':data})	
+
+def foodrating3(request):
+	data=models.FoodItem.objects.filter(rating=3)
+	return render(request,'homechef/searchfood.html',{'data':data})	
+
+def foodrating4(request):
+	data=models.FoodItem.objects.filter(rating=4)
+	return render(request,'homechef/searchfood.html',{'data':data})	
+
+def foodrating5(request):
+	data=models.FoodItem.objects.filter(rating=5)
+	return render(request,'homechef/searchfood.html',{'data':data})	
+
+def searchprice1(request):
+	data=models.FoodItem.objects.filter(Q(price__gte=100) | Q(price__lt = 250))
+	return render(request,'homechef/searchfood.html',{'data':data})	
+
+def searchprice2(request):
+	data=models.FoodItem.objects.filter(Q(price__gte= 250) | Q(price__lt = 500))
+	return render(request,'homechef/searchfood.html',{'data':data})	
+
+def searchprice3(request):
+	data=models.FoodItem.objects.filter(Q(price__gte=500))
+	return render(request,'homechef/searchfood.html',{'data':data})		
+			
+def listing(request):
+    vendor_list = Vendor.objects.all()
+    paginator = Paginator(vendor_list, 25) # Show 25 contacts per page.
+
+    page_number = request.GET.get('page')
+    page_obj = paginator.get_page(page_number)
+    return render(request, 'vendor.html', {'page_obj': page_obj})			
+
+class VolunteerView(View):
+	def get(self, *args, **kwargs):
+		form = VolunteerForm()
+		context = {
+			'form': form
+		}
+		return render(self.request,'homechef/index.html',context)
+
+	def post(self, *args, **kwargs):
+		form = VolunteerForm(self.request.POST or None)
+		if form.is_valid():
+			address = form.cleaned_data.get('address')
+			city = form.cleaned_data.get('city')
+			state = form.cleaned_data.get('state')
+			pincode = form.cleaned_data.get('pincode')
+			volunteer_model = VolunteerModel(
+				user = self.request.user,
+				address = address,
+				city = city,
+				state = state,
+				pincode = pincode,
+			)
+			volunteer_model.save()
+			return render(self.request,'homechef/landing.html')
+		return render(self.request,'homechef/landing.html')
+
+@login_required
+def myvolunteerinfo(request):
+	if request.method == 'POST':
+	   v_form = VolunteerUpdateForm(request.POST, instance=request.user.profile)
+	   if v_form.is_valid():
+		   v_form.save()
+		   messages.success(request, f'Your account has been updated!')
+		   return redirect('myvolunteerinfo')
+	else:
+		v_form = VolunteerUpdateForm(instance=request.user.profile)
+
+	context = {
+		'v_form':v_form
+	}
+	return render(request,'homechef/myvolunteerinfo.html', context)

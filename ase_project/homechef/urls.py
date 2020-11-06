@@ -1,6 +1,5 @@
-from django.urls import path
+from django.urls import path, include
 from . import views
-
 
 urlpatterns = [
     path('', views.landing, name = 'landing'),
@@ -13,7 +12,33 @@ urlpatterns = [
     path('remove-single-item-from-cart/<vendor_id>/<food_id>/',views.remove_single_item_from_cart,name="remove-single-item-from-cart"),
     path('order-summary/',views.OrderSummaryView.as_view(),name="order-summary"),
     path('checkout/',views.CheckoutView.as_view(),name="checkout"),
+    path('payment/',views.payment_process,name="payment"),
     path('bevolunteer/',views.Bevolunteer,name="bevolunteer"),
-    path('Volunteerform/',views.Volunteerform,name="Volunteerform"),
-    path('selling1/',views.Selling1,name="selling1")
+    path('Volunteerform/',views.VolunteerView,name="Volunteerform"),
+    path('selling1/',views.Selling1,name="selling1"),
+    path('sellerprofile/',views.sellerprofile,name="sellerprofile"),
+    path('sell/',views.sell,name="sell"),
+    path('temporary/',views.temporary,name="temporary"),
+    path('searchfood/',views.searchfood,name="searchfood"),
+    path('searchaddress/',views.searchaddress,name="searchaddress"),
+    path('searchrating1/',views.searchrating1,name="searchrating1"),
+    path('searchrating2/',views.searchrating2,name="searchrating2"),
+    path('searchrating3/',views.searchrating3,name="searchrating3"),
+    path('searchrating4/',views.searchrating4,name="searchrating4"),
+    path('searchrating5/',views.searchrating5,name="searchrating5"),
+    path('searchprice1/',views.searchprice1,name="searchprice1"),
+    path('searchprice2/',views.searchprice2,name="searchprice2"),
+    path('searchprice3/',views.searchprice3,name="searchprice3"),
+    path('foodrating1/',views.foodrating1,name="foodrating1"),
+    path('foodrating2/',views.foodrating2,name="foodrating2"),
+    path('foodrating3/',views.foodrating3,name="foodrating3"),
+    path('foodrating4/',views.foodrating4,name="foodrating4"),
+    path('foodrating5/',views.foodrating5,name="foodrating5"),
+    path('registeredsucc/',views.registeredsucc,name="registeredsucc"),
+    path('purchaseinfo/',views.purchaseinfo,name="purchaseinfo"),
+    path('myvolunteerinfo/',views.myvolunteerinfo,name="myvolunteerinfo"),
+    path('deletedsucc/',views.deletedsucc,name="deletedsucc"),
+    path('addsucc/',views.addsucc,name="addsucc"),
+    path('hire/',views.hire,name="hire"),
+    path('hireweb/',views.hireweb,name="hireweb")
 ]

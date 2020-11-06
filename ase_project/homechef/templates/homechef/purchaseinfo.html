@@ -8,7 +8,8 @@
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
       <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
     <link rel="stylesheet" type="text/css" href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700|Roboto+Slab:400,700|Material+Icons" />
-    <link rel="stylesheet" href="{% static 'homechef/base.css' %}">   
+    <link rel="stylesheet" href="{% static 'homechef/css/base.css' %}">  
+    <link rel="stylesheet" href="{% static 'homechef/css/soldsummary.css' %}" >
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/latest/css/font-awesome.min.css">
 </head>
 <body>
@@ -102,7 +103,7 @@
                           <a class="nav-link" href="{% url 'Buy' %}" style="color:black;">Buy</a>
                         </li>
                         <li class="nav-item">
-                          <a class="nav-link" href="#" style="color:black;">Sell</a>
+                          <a class="nav-link" href="{% url 'sell' %}" style="color:black;">Sell</a>
                         </li>
                         <li class="nav-item">
                           <a class="nav-link" href="#" style="color:black;">Hire</a>
@@ -133,59 +134,79 @@
                     <div class="row">
                       <div class="col-md-8">
                         <div class="card">
-                          <div class="card-header card-header-primary">
-                            <h4 class="card-title">Edit Profile</h4>
-                            <p class="card-category">Complete your profile</p>
-                          </div>
-                          <div class="card-body">
-                        
-                              
-                              
-                              <div class="col-lg-6">
-                                <form method="POST" enctype="multipart/form-data">
-                                  {% csrf_token %}
-                                    <fieldset class = "form-group">
-                                      <legend class="border-bottom mb-4">Profile Info</legend>
-                                      {{ u_form|crispy }}
-                                      {{ p_form|crispy }}
-                                    </fieldset>
-                              <div class="form-group">
-                                <button type="submit" class="btn btn-warning">Update</button>
-                              </div>
-                                </form>
+                            <div class="card-header card-header-primary">
+                              <h4 class="card-title">Items you already bought</h4>
+                              <p class="card-category">Purchase info</p>
                             </div>
-                             
-                              <!-- <button type="submit" class="btn btn-primary pull-right">Update Profile</button>
-                              <div class="clearfix"></div>
-                            </form> -->
-                          </div>
-                        </div>
+                            <div class="card-body">      
+<div class="container mt-5">
+    <div class="d-flex justify-content-center row">
+        <div class="col-md-10">
+            <div class="rounded">
+                <div class="table-responsive table-borderless">
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th class="text-center">S. No.</th>
+                                <!-- <th>Order #</th> -->
+                                <th>Item name</th>
+                                <th>status</th>
+                                <th>Total</th>
+                                <th>purchased on</th>
+                                <th >Order</th>
+                                <th >Order</th>
+
+                                
+                            </tr>
+                        </thead>
+                        <tbody class="table-body">
+                            <tr class="cell-1" data-toggle="collapse" data-target="#demo">
+                                <td class="text-center">1</td>
+                               
+                                <td>Biryani</td>
+                                <td><span class="badge badge-danger">Fullfilled</span></td>
+                                <td>Rs.200</td>
+                                <td>Yesterday</td>
+                                <a href=""><td><button type="button" class="btn btn-secondary btn-sm">
+                                    <a href="{% url 'temporary' %}">View order
+                                    </a>
+                                    </button></td></a>
+                                <td><button type="button" class="btn btn-secondary btn-sm">
+                                    <a href="{% url 'deletedsucc' %}">Cancel order</a></button></td>
+                                
+                            </tr>
+                            
+                            <tr class="cell-1" data-toggle="collapse" data-target="#demo">
+                                <td class="text-center">2</td>
+                                
+                                <td>Cookies</td>
+                                <td><span class="badge badge-success">Ongoing</span></td>
+                                <td>Rs.200</td>
+                                <td>Today</td>
+                                <td><button type="button" class="btn btn-secondary btn-sm">
+                                    <a href="{% url 'temporary' %}">View order
+                                    </a>
+                                    </button></td>
+                                <td><button type="button" class="btn btn-secondary btn-sm">
+                                    <a href="{% url 'deletedsucc' %}">Cancel order</a></button></td>
+                                
+                            </tr>
+                           
+                            
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
+</div>
+</div>
                       </div>
 
 
-                      <div class="col-md-4">
-                        <div class="card card-profile">
-                          <div class="card-avatar">
-                            <a href="javascript:;">
-                              <img class="rounded-circle account-img shadow-lg" height = "250" width = "250"  src="{{ user.profile.image.url }}" >
-                            </a>
-                          </div>
-                          <div class="card-body">
-                            <h6 class="card-category text-gray">Username :{{ user.username }}</h6>
-                            <p class="text-secondary">Email id :{{ user.email }}</p>
-                            {% if user.profile.phone_number %}
-          <p class="text-secondary">PhoneNumber : {{ user.profile.phone_number }}</p>
-        {% else %}
-          <p class="text-secondary">PhoneNumber : </p>
-        {% endif %}
-                            <p class="card-description">
-                              Don't be scared of the truth because we need to restart the human foundation in truth And I love you like Kanye loves Kanye I love Rick Owens’ bed design but the back is...
-                            </p>
-                            <a href="javascript:;" class="btn btn-primary btn-round">Follow</a>
-                          </div>
-                          
-                        </div>
-                      </div>
+                     
                     </div>
                   </div>
                 </div>

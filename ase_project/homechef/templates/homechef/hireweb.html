@@ -69,7 +69,7 @@
 
         <label class="sr-only" for="search">Search</label>
         <div class="input-group">
-          <input type="text" class="form-control input-search" name="q" id="search" placeholder="Search by Food">
+          <input type="text" class="form-control input-search" name="q" id="search" placeholder="Search by Pincode">
           <span class="input-group-addon group-icon"> <span class="glyphicon glyphicon-user"></span>
           </span>
         </div>
@@ -94,40 +94,7 @@
 <div class="row row-cols-1 row-cols-md-5 ">
 <!-- <div class="shadow p-3 mb-5 bg-white rounded"> -->
   
-  {% for sample in data %}
-      <div class="col mb-4">
-        <a href="{% url 'vendorlist' sample.id %}" style="color:black;">
-        <div class="card" style="width:12rem;height:18rem;">
-          <img src="{% static 'homechef/images/food_img1.jpg' %}" class="card-img-top"  alt="...">
-        
-            <h5 class="card-title">{{sample.itemname}}</h5>
-            <!-- <p class="card-text">{{sample.description}}</p> -->
-            </a>
-          
-            <div class="star">
-              <h6>Rating</h6>
-              {% with ""|center:sample.rating as range %}
-                {% for i in range %}
-                    <span class="fa fa-star checked"></span>
-                {%endfor %}
-              {% endwith %}
-            </div>
-            <h4 class="font-weight-bold blue-text">
-              <strong>
-                 Rs.
-                 {% if sample.discount_price %}
-                 {{ sample.discount_price }}
-                 {% else %}
-                 {{ sample.price }}
-                 {% endif %}
-              </strong>
-            </h4>
-        
-      </div>
-    
-    </div>
-  {% endfor %}
-</div>
+  </div>
 <div class="container"> 
   
 
